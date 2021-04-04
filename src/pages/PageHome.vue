@@ -18,10 +18,10 @@
 
     <q-separator size="10px" color="grey-2" class="divider" />
 
-    <q-list>
+    <q-list separator>
 
       <q-item-label header></q-item-label>
-      <q-item class="q-py-md">
+      <q-item class="q-py-md" v-for="vuett in vuetts" :key="vuett.date">
         <q-item-section avatar top>
           <q-avatar size="xl">
             <img src="https://cdn.quasar.dev/img/avatar5.jpg">
@@ -34,8 +34,7 @@
             <span class="text-grey-7">@hasan_ijaz</span>
             </q-item-label>
           <q-item-label class="vuett-content text-body1">
-            Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Quas quibusdam ex obcaecati voluptatibus corrupti sequi asperiores maiores aliquid temporibus sunt numquam, deleniti incidunt consequatur id praesentium non delectus itaque sit.
+            {{ vuett.content }}
           </q-item-label>
 
           <div class="row justify-between q-mt-sm vuett-icons">
@@ -70,7 +69,7 @@
           </div>
         </q-item-section>
         <q-item-section side top>
-          1 min ago
+          {{ vuett.date | relativeDate }}
         </q-item-section>
       </q-item>
     </q-list>
@@ -78,13 +77,34 @@
 </template>
 
 <script>
+import { formatDistance } from 'date-fns'
+
 export default {
   name: 'PageHome',
   data() {
     return {
-      newVuettContent: ""
+      newVuettContent: "",
+      vuetts: [
+        {
+          content: 'lorem asdddddddddddddddddddddd',
+          date: 1617570592760
+        },
+        {
+          content: 'lorem asdddddddddddddddddddddd',
+          date: 16175705927213
+        },
+        {
+          content: 'lorem asdddddddddddddddddddddd',
+          date: 16175705927123
+        }
+      ]
     }
 
+  },
+  filters: {
+    relativeDate(value) {
+      return formatDistance(value, new Date())
+    }
   }
 }
 </script>
