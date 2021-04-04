@@ -12,7 +12,7 @@
       </div>
 
       <div class="col col-shrink">
-         <q-btn class="q-mb-lg" unelevated rounded color="primary" label="Vuett" no-caps :disable="!newVuettContent" />
+         <q-btn @click="addNewVuett"  class="q-mb-lg" unelevated rounded color="primary" label="Vuett" no-caps :disable="!newVuettContent" />
       </div>
     </div>
 
@@ -100,6 +100,15 @@ export default {
       ]
     }
 
+  },
+  methods: {
+    addNewVuett() {
+      let newVuett = {
+        content: this.newVuettContent,
+        date: Date.now()
+      }
+      this.vuetts.unshift(newVuett)
+    }
   },
   filters: {
     relativeDate(value) {
