@@ -19,60 +19,64 @@
     <q-separator size="10px" color="grey-2" class="divider" />
 
     <q-list separator>
+      <transition-group
+        appear
+        enter-active-class="animated fadeIn slow"
+        leave-active-class="animated fadeOut slow"
+      >
+        <q-item class="vuett q-py-md" v-for="vuett in vuetts" :key="vuett.date">
+          <q-item-section avatar top>
+            <q-avatar size="xl">
+              <img src="https://cdn.quasar.dev/img/avatar5.jpg">
+            </q-avatar>
+          </q-item-section>
 
-      <q-item-label header></q-item-label>
-      <q-item class="q-py-md" v-for="vuett in vuetts" :key="vuett.date">
-        <q-item-section avatar top>
-          <q-avatar size="xl">
-            <img src="https://cdn.quasar.dev/img/avatar5.jpg">
-          </q-avatar>
-        </q-item-section>
-
-        <q-item-section>
-          <q-item-label class="text-subtitle1">
-            <strong>Hasan Ijaz</strong>
-            <span class="text-grey-7">@hasan_ijaz</span>
+          <q-item-section>
+            <q-item-label class="text-subtitle1">
+              <strong>Hasan Ijaz</strong>
+              <span class="text-grey-7">@hasan_ijaz</span>
+              </q-item-label>
+            <q-item-label class="vuett-content text-body1">
+              {{ vuett.content }}
             </q-item-label>
-          <q-item-label class="vuett-content text-body1">
-            {{ vuett.content }}
-          </q-item-label>
 
-          <div class="row justify-between q-mt-sm vuett-icons">
-            <q-btn
-              color="black"
-              icon="far fa-comment"
-              size="sm"
-              flat
-              round
-            />
-            <q-btn
-              color="black"
-              icon="fas fa-retweet"
-              size="sm"
-              flat
-              round
-            />
-            <q-btn
-              color="black"
-              icon="far fa-heart"
-              size="sm"
-              flat
-              round
-            />
-            <q-btn
-              @click="deleteVuett(vuett)"
-              color="black"
-              icon="fas fa-trash"
-              size="sm"
-              flat
-              round
-            />
-          </div>
-        </q-item-section>
-        <q-item-section side top>
-          {{ vuett.date | relativeDate }}
-        </q-item-section>
-      </q-item>
+            <div class="row justify-between q-mt-sm vuett-icons">
+              <q-btn
+                color="black"
+                icon="far fa-comment"
+                size="sm"
+                flat
+                round
+              />
+              <q-btn
+                color="black"
+                icon="fas fa-retweet"
+                size="sm"
+                flat
+                round
+              />
+              <q-btn
+                color="black"
+                icon="far fa-heart"
+                size="sm"
+                flat
+                round
+              />
+              <q-btn
+                @click="deleteVuett(vuett)"
+                color="black"
+                icon="fas fa-trash"
+                size="sm"
+                flat
+                round
+              />
+            </div>
+          </q-item-section>
+          <q-item-section side top>
+            {{ vuett.date | relativeDate }}
+          </q-item-section>
+        </q-item>
+      </transition-group>
     </q-list>
   </q-page>
 </template>
@@ -109,6 +113,7 @@ export default {
         date: Date.now()
       }
       this.vuetts.unshift(newVuett)
+      this.newVuettContent = ''
     },
     deleteVuett(vuett) {
       let dateToDelete = vuett.date
@@ -136,4 +141,6 @@ export default {
   white-space: pre-line
 .vuett-icons
   margin-left: -5px
+.vuett:not(:first-child)
+  border-top: 1px solid rgba(0,0,0,0.12)
 </style>
