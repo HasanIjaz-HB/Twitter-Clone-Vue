@@ -1,83 +1,85 @@
 <template>
-  <q-page>
-    <div class="q-py-lg q-px-md row items-end q-col-gutter-md">
-      <div class="col">
-        <q-input bottom-slots v-model="newVuettContent" place-holder="What's happening?" counter maxlength="280" autogrow class="new-vuett">
-          <template v-slot:before>
-            <q-avatar size="xl">
-              <img src="https://cdn.quasar.dev/img/avatar5.jpg">
-            </q-avatar>
-          </template>
-        </q-input>
+  <q-page class="relative-position">
+    <q-scroll-area class="absolute fullscreen">
+      <div class="q-py-lg q-px-md row items-end q-col-gutter-md">
+        <div class="col">
+          <q-input bottom-slots v-model="newVuettContent" place-holder="What's happening?" counter maxlength="280" autogrow class="new-vuett">
+            <template v-slot:before>
+              <q-avatar size="xl">
+                <img src="https://cdn.quasar.dev/img/avatar5.jpg">
+              </q-avatar>
+            </template>
+          </q-input>
+        </div>
+
+        <div class="col col-shrink">
+          <q-btn @click="addNewVuett"  class="q-mb-lg" unelevated rounded color="primary" label="Vuett" no-caps :disable="!newVuettContent" />
+        </div>
       </div>
 
-      <div class="col col-shrink">
-         <q-btn @click="addNewVuett"  class="q-mb-lg" unelevated rounded color="primary" label="Vuett" no-caps :disable="!newVuettContent" />
-      </div>
-    </div>
+      <q-separator size="10px" color="grey-2" class="divider" />
 
-    <q-separator size="10px" color="grey-2" class="divider" />
+      <q-list separator>
+        <transition-group
+          appear
+          enter-active-class="animated fadeIn slow"
+          leave-active-class="animated fadeOut slow"
+        >
+          <q-item class="vuett q-py-md" v-for="vuett in vuetts" :key="vuett.date">
+            <q-item-section avatar top>
+              <q-avatar size="xl">
+                <img src="https://cdn.quasar.dev/img/avatar5.jpg">
+              </q-avatar>
+            </q-item-section>
 
-    <q-list separator>
-      <transition-group
-        appear
-        enter-active-class="animated fadeIn slow"
-        leave-active-class="animated fadeOut slow"
-      >
-        <q-item class="vuett q-py-md" v-for="vuett in vuetts" :key="vuett.date">
-          <q-item-section avatar top>
-            <q-avatar size="xl">
-              <img src="https://cdn.quasar.dev/img/avatar5.jpg">
-            </q-avatar>
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label class="text-subtitle1">
-              <strong>Hasan Ijaz</strong>
-              <span class="text-grey-7">@hasan_ijaz</span>
+            <q-item-section>
+              <q-item-label class="text-subtitle1">
+                <strong>Hasan Ijaz</strong>
+                <span class="text-grey-7">
+                  @hasan_ijaz
+                  <br class="lt-md">&bull; {{ vuett.date | relativeDate }}
+                  </span>
+                </q-item-label>
+              <q-item-label class="vuett-content text-body1">
+                {{ vuett.content }}
               </q-item-label>
-            <q-item-label class="vuett-content text-body1">
-              {{ vuett.content }}
-            </q-item-label>
 
-            <div class="row justify-between q-mt-sm vuett-icons">
-              <q-btn
-                color="black"
-                icon="far fa-comment"
-                size="sm"
-                flat
-                round
-              />
-              <q-btn
-                color="black"
-                icon="fas fa-retweet"
-                size="sm"
-                flat
-                round
-              />
-              <q-btn
-                color="black"
-                icon="far fa-heart"
-                size="sm"
-                flat
-                round
-              />
-              <q-btn
-                @click="deleteVuett(vuett)"
-                color="black"
-                icon="fas fa-trash"
-                size="sm"
-                flat
-                round
-              />
-            </div>
-          </q-item-section>
-          <q-item-section side top>
-            {{ vuett.date | relativeDate }}
-          </q-item-section>
-        </q-item>
-      </transition-group>
-    </q-list>
+              <div class="row justify-between q-mt-sm vuett-icons">
+                <q-btn
+                  color="black"
+                  icon="far fa-comment"
+                  size="sm"
+                  flat
+                  round
+                />
+                <q-btn
+                  color="black"
+                  icon="fas fa-retweet"
+                  size="sm"
+                  flat
+                  round
+                />
+                <q-btn
+                  color="black"
+                  icon="far fa-heart"
+                  size="sm"
+                  flat
+                  round
+                />
+                <q-btn
+                  @click="deleteVuett(vuett)"
+                  color="black"
+                  icon="fas fa-trash"
+                  size="sm"
+                  flat
+                  round
+                />
+              </div>
+            </q-item-section>
+          </q-item>
+        </transition-group>
+      </q-list>
+    </q-scroll-area>
   </q-page>
 </template>
 
