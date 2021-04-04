@@ -60,6 +60,7 @@
               round
             />
             <q-btn
+              @click="deleteVuett(vuett)"
               color="black"
               icon="fas fa-trash"
               size="sm"
@@ -108,7 +109,12 @@ export default {
         date: Date.now()
       }
       this.vuetts.unshift(newVuett)
-    }
+    },
+    deleteVuett(vuett) {
+      let dateToDelete = vuett.date
+      let index = this.vuetts.findIndex(vuett => vuett.date === dateToDelete)
+      this.vuetts.splice(index,1)
+    },
   },
   filters: {
     relativeDate(value) {
