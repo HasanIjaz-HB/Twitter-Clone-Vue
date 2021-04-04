@@ -6,7 +6,13 @@
         <q-btn dense flat round icon="menu" @click="left = !left" />
 
         <q-toolbar-title class="text-weight-bold">
-          Vuetter
+          <span class="gt-sm">Vuetter</span>
+          <q-icon
+          class="q-pa-md lt-md header-icon"
+          name="fas fa-dove"
+          size="sm"
+          color="primary"
+        />
         </q-toolbar-title>
 
       </q-toolbar>
@@ -103,3 +109,11 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+.header-icon
+  position: absolute
+  bottom: 0
+  left: 50%
+  transform: translateX(-50%)
+</style>
