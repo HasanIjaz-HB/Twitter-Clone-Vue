@@ -3,17 +3,34 @@
     <q-scroll-area class="absolute fullscreen">
       <div class="q-py-lg q-px-md row items-end q-col-gutter-md">
         <div class="col">
-          <q-input bottom-slots v-model="newVuettContent" place-holder="What's happening?" counter maxlength="280" autogrow class="new-vuett">
+          <q-input
+            bottom-slots
+            v-model="newVuettContent"
+            place-holder="What's happening?"
+            counter
+            maxlength="280"
+            autogrow
+            class="new-vuett"
+          >
             <template v-slot:before>
               <q-avatar size="xl">
-                <img src="https://cdn.quasar.dev/img/avatar5.jpg">
+                <img src="https://cdn.quasar.dev/img/avatar5.jpg" />
               </q-avatar>
             </template>
           </q-input>
         </div>
 
         <div class="col col-shrink">
-          <q-btn @click="addNewVuett"  class="q-mb-lg" unelevated rounded color="primary" label="Vuett" no-caps :disable="!newVuettContent" />
+          <q-btn
+            @click="addNewVuett"
+            class="q-mb-lg"
+            unelevated
+            rounded
+            color="primary"
+            label="Vuett"
+            no-caps
+            :disable="!newVuettContent"
+          />
         </div>
       </div>
 
@@ -25,10 +42,14 @@
           enter-active-class="animated fadeIn slow"
           leave-active-class="animated fadeOut slow"
         >
-          <q-item class="vuett q-py-md" v-for="vuett in vuetts" :key="vuett.date">
+          <q-item
+            class="vuett q-py-md"
+            v-for="vuett in vuetts"
+            :key="vuett.date"
+          >
             <q-item-section avatar top>
               <q-avatar size="xl">
-                <img src="https://cdn.quasar.dev/img/avatar5.jpg">
+                <img src="https://cdn.quasar.dev/img/avatar5.jpg" />
               </q-avatar>
             </q-item-section>
 
@@ -37,9 +58,9 @@
                 <strong>Hasan Ijaz</strong>
                 <span class="text-grey-7">
                   @hasan_ijaz
-                  <br class="lt-md">&bull; {{ vuett.date | relativeDate }}
-                  </span>
-                </q-item-label>
+                  <br class="lt-md" />&bull; {{ vuett.date | relativeDate }}
+                </span>
+              </q-item-label>
               <q-item-label class="vuett-content text-body1">
                 {{ vuett.content }}
               </q-item-label>
@@ -59,13 +80,7 @@
                   flat
                   round
                 />
-                <q-btn
-                  color="black"
-                  icon="far fa-heart"
-                  size="sm"
-                  flat
-                  round
-                />
+                <q-btn color="black" icon="far fa-heart" size="sm" flat round />
                 <q-btn
                   @click="deleteVuett(vuett)"
                   color="black"
@@ -84,51 +99,70 @@
 </template>
 
 <script>
-import { formatDistance } from 'date-fns'
+import { formatDistance } from "date-fns";
+import db from "src/boot/firebase";
 
 export default {
-  name: 'PageHome',
+  name: "PageHome",
   data() {
     return {
       newVuettContent: "",
       vuetts: [
-        {
-          content: 'lorem asdddddddddddddddddddddd',
-          date: 1617570592760
-        },
-        {
-          content: 'lorem asdddddddddddddddddddddd',
-          date: 16175705927213
-        },
-        {
-          content: 'lorem asdddddddddddddddddddddd',
-          date: 16175705927123
-        }
+        // {
+        //   content: "lorem asdddddddddddddddddddddd",
+        //   date: 1617570592760
+        // },
+        // {
+        //   content: "lorem asdddddddddddddddddddddd",
+        //   date: 16175705927213
+        // },
+        // {
+        //   content: "lorem asdddddddddddddddddddddd",
+        //   date: 16175705927123
+        // }
       ]
-    }
-
+    };
   },
   methods: {
     addNewVuett() {
       let newVuett = {
         content: this.newVuettContent,
         date: Date.now()
-      }
-      this.vuetts.unshift(newVuett)
-      this.newVuettContent = ''
+      };
+      this.vuetts.unshift(newVuett);
+      this.newVuettContent = "";
     },
     deleteVuett(vuett) {
-      let dateToDelete = vuett.date
-      let index = this.vuetts.findIndex(vuett => vuett.date === dateToDelete)
-      this.vuetts.splice(index,1)
-    },
+      let dateToDelete = vuett.date;
+      let index = this.vuetts.findIndex(vuett => vuett.date === dateToDelete);
+      this.vuetts.splice(index, 1);
+    }
   },
   filters: {
     relativeDate(value) {
-      return formatDistance(value, new Date())
+      return formatDistance(value, new Date());
     }
+  },
+  mounted() {
+    db.collection("vuetts")
+      .orderBy("date")
+      .onSnapshot(snapshot => {
+        snapshot.docChanges().forEach(change => {
+          let vuettChange = change.doc.data();
+          if (change.type === "added") {
+            console.log("New vuett: ", vuettChange);
+            this.vuetts.unshift(vuettChange);
+          }
+          if (change.type === "modified") {
+            console.log("Modified vuett: ", vuettChange);
+          }
+          if (change.type === "removed") {
+            console.log("Removed vuett: ", vuettChange);
+          }
+        });
+      });
   }
-}
+};
 </script>
 <style lang="sass">
 .new-vuett
