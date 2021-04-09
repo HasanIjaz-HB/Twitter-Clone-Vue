@@ -8,7 +8,7 @@
           <span class="gt-sm">{{ $route.name }}</span>
           <q-icon
             class="q-pa-md lt-md header-icon"
-            name="fas fa-dove"
+            name="fas fa-book-dead"
             size="sm"
             color="primary"
           />
@@ -18,7 +18,12 @@
 
     <q-drawer show-if-above v-model="left" side="left" bordered :width="283">
       <!-- drawer content -->
-      <q-icon class="q-pa-md" name="fas fa-dove" size="lg" color="primary" />
+      <q-icon
+        class="q-pa-md"
+        name="fas fa-book-dead"
+        size="lg"
+        color="primary"
+      />
       <q-list>
         <q-item clickable v-ripple to="/" exact>
           <q-item-section avatar>

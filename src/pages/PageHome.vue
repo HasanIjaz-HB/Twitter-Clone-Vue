@@ -51,9 +51,9 @@
 
             <q-item-section>
               <q-item-label class="text-subtitle1">
-                <strong>Hasan Ijaz</strong>
+                <strong>Anonymous</strong>
                 <span class="text-grey-7">
-                  @hasan_ijaz
+                  @Anonymous
                   <br class="lt-md" />&bull; {{ vuett.date | relativeDate }}
                 </span>
               </q-item-label>
