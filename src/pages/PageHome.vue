@@ -1,6 +1,6 @@
 <template>
   <q-page class="relative-position">
-    <q-scroll-area class="absolute fullscreen">
+    <q-scroll-area class="absolute full-height full-width">
       <div class="q-py-lg q-px-md row items-end q-col-gutter-md">
         <div class="col">
           <q-input
@@ -42,11 +42,7 @@
           enter-active-class="animated fadeIn slow"
           leave-active-class="animated fadeOut slow"
         >
-          <q-item
-            class="vuett q-py-md"
-            v-for="vuett in vuetts"
-            :key="vuett.date"
-          >
+          <q-item class="vuett q-py-md" v-for="vuett in vuetts" :key="vuett.id">
             <q-item-section avatar top>
               <q-avatar size="xl">
                 <img src="https://cdn.quasar.dev/img/avatar5.jpg" />
@@ -80,7 +76,15 @@
                   flat
                   round
                 />
-                <q-btn color="black" icon="far fa-heart" size="sm" flat round />
+                <q-btn
+                  :color="vuett.liked ? 'red' : 'black'"
+                  :icon="vuett.liked ? 'fas fa-heart' : 'far fa-heart'"
+                  size="sm"
+                  @click="toggleLiked(vuett)"
+                  flat
+                  round
+                />
+
                 <q-btn
                   @click="deleteVuett(vuett)"
                   color="black"
@@ -109,16 +113,16 @@ export default {
       newVuettContent: "",
       vuetts: [
         // {
+        //   id: 1,
         //   content: "lorem asdddddddddddddddddddddd",
-        //   date: 1617570592760
+        //   date: 1617570592760,
+        //   liked: true
         // },
         // {
-        //   content: "lorem asdddddddddddddddddddddd",
-        //   date: 16175705927213
-        // },
-        // {
-        //   content: "lorem asdddddddddddddddddddddd",
-        //   date: 16175705927123
+        //   id: 2,
+        //   content: "lorem xzxzxd",
+        //   date: 16175705927213,
+        //   liked: false
         // }
       ]
     };
@@ -127,7 +131,8 @@ export default {
     addNewVuett() {
       let newVuett = {
         content: this.newVuettContent,
-        date: Date.now()
+        date: Date.now(),
+        liked: false
       };
       db.collection("vuetts")
         .add(newVuett)
@@ -140,9 +145,28 @@ export default {
       this.newVuettContent = "";
     },
     deleteVuett(vuett) {
-      let dateToDelete = vuett.date;
-      let index = this.vuetts.findIndex(vuett => vuett.date === dateToDelete);
-      this.vuetts.splice(index, 1);
+      db.collection("vuetts")
+        .doc(vuett.id)
+        .delete()
+        .then(() => {
+          console.log("Document successfully deleted!");
+        })
+        .catch(error => {
+          console.error("Error removing document: ", error);
+        });
+    },
+    toggleLiked(vuett) {
+      db.collection("vuetts")
+        .doc(vuett.id)
+        .update({
+          liked: !vuett.liked
+        })
+        .then(() => {
+          console.log("Document successfully updated!");
+        })
+        .catch(error => {
+          console.error("Error updating document: ", error);
+        });
     }
   },
   filters: {
@@ -156,15 +180,24 @@ export default {
       .onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {
           let vuettChange = change.doc.data();
+          vuettChange.id = change.doc.id;
           if (change.type === "added") {
             console.log("New vuett: ", vuettChange);
             this.vuetts.unshift(vuettChange);
           }
           if (change.type === "modified") {
             console.log("Modified vuett: ", vuettChange);
+            let index = this.vuetts.findIndex(
+              vuett => vuett.id === vuettChange.id
+            );
+            Object.assign(this.vuetts[index], vuettChange);
           }
           if (change.type === "removed") {
             console.log("Removed vuett: ", vuettChange);
+            let index = this.vuetts.findIndex(
+              vuett => vuett.id === vuettChange.id
+            );
+            this.vuetts.splice(index, 1);
           }
         });
       });
