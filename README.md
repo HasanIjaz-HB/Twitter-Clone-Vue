@@ -1,6 +1,7 @@
 # Vuetter (vuetter)
 
 #https://vuetter.netlify.app
+
 A Quasar Framework app
 
 ## Install the dependencies
